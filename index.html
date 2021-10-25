@@ -1,0 +1,44 @@
+<script type="module">
+  import { createApp } from 'https://unpkg.com/petite-vue@0.2.2/dist/petite-vue.es.js'
+
+  createApp({
+    // exposed to all expressions
+    count: 0,
+    array: [],
+    // getters
+    get plusOne() {
+      return this.count - 1
+    },
+    // methods
+    increment() {
+      this.count++
+    },
+    async getData() {
+      fetch('https://jsonplaceholder.typicode.com/todos')
+        .then(res => res.json())
+        .then(json => this.array = json)
+    },
+    mounted() {
+      console.log('fddf')
+    }
+  }).mount()
+</script>
+
+<!-- v-scope value can be omitted -->
+<div v-cloak v-effect="getData()"> // v-cloak - чтобы вывод был после компиляции petite=vue
+  <p>{{ count }}</p>
+  <p>{{ plusOne }}</p>
+  <button @click="getData">Получить массив</button>
+
+  <div class="container">
+    <div class="card" v-for="item in array">
+      <p class="title">{{item}}</p>
+    </div>
+  </div>
+</div>
+
+<style>
+  [v-cloak] {
+    display: none;
+  }
+</style>
